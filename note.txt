@@ -1,0 +1,6 @@
+commit messages
+feat -  features
+"feat: added cors"
+refactor: 'refactored/ updated logic'
+styles
+fixes 'fixed nav bar togglinggit commit'
