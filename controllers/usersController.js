@@ -2,7 +2,7 @@ const USER = require("../models/user");
 const bcrypt = require("bcryptjs");
 const generateToken = require("../helpers/generateToken");
 const { sendWelcomeEmail } = require("../email/sendEmail");
-const jwt = require("jsonwedtoken")
+const jwt = require("jsonwebtoken")
 
 
 const handleRegister = async (req, res) => {
