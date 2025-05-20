@@ -8,7 +8,7 @@ const jwt = require("jsonwebtoken")
 const handleRegister = async (req, res) => {
   const { fullName, email, password, phoneNumber, role } = req.body;
   try {
-    // chack if user exists (email and phoneNumber)
+    // check if user exists (email and phoneNumber)
     const existingUser = await USER.findOne({
       $or: [{ email: email || null }, { phoneNumber: phoneNumber || null }],
     });
@@ -128,7 +128,45 @@ const handleLogin =  async (req, res) => {
         res.status(500).json({ messsage: error.message})
     } 
 }
+const resendVerificationEmail = async (req, res) => {
+  const { email } = req.body;
+
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+
+  try {
+    const user = await USER.findOne({ email });
+    if (!user) {
+      return res.status(400).json({ message: "User not found" });
+    }
+    if (user.isVerified) {
+      return res.status(400).json({ message: "Email is already verified" });
+    }
+    //generate token again
+    const newToken = generateToken();
+    const tokenExpires = Date.now() + 24 * 60 * 60 * 1000;
+
+    user.verificationToken = newToken;
+    user.verificationTokenExpires = tokenExpires;
+    await user.save();
+    //Send an email
+    const clientUrl = `${process.env.FRONTEND_URL}/verify-email/${newToken}`;
+    await sendWelcomeEmail({
+      email: user.email,
+      fullName: user.fullName,
+      clientUrl,
+    });
+
+    return res
+      .status(201)
+      .json({ success: true, message: "Verification Email sent" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: error.message });
+  }
+};
 
 
 
-module.exports = {handleRegister, handleVerifyEmail, handleLogin};
+module.exports = {handleRegister, handleVerifyEmail, handleLogin, resendVerificationEmail};
