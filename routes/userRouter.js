@@ -4,10 +4,25 @@ const {
   handleVerifyEmail,
   handleLogin,
   resendVerificationEmail,
+  handleForgotPassword,
+  handleResetPassword,
+  handleUpdateUser,
+  handleGetUser
 } = require("../controllers/usersController");
+const { isLoggedIn, requiresPermission } = require("../middleware/auth");
 
 router.post("/register", handleRegister);
 router.post("/verify-email/:token", handleVerifyEmail);
 router.post("/login", handleLogin);
 router.post("/resend-email", resendVerificationEmail);
+router.post("/forgot-password", handleForgotPassword)
+router.post("/reset-password", handleResetPassword)
+router.post("/user", handleUpdateUser)
+router.post("/user", handleGetUser)
+ router.patch(
+  "/user",
+  isLoggedIn,
+  requiresPermission(["landlord"]),
+  handleUpdateUser
+ )
 module.exports = router;
