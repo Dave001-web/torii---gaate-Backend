@@ -17,12 +17,11 @@ router.post("/login", handleLogin);
 router.post("/resend-email", resendVerificationEmail);
 router.post("/forgot-password", handleForgotPassword)
 router.post("/reset-password", handleResetPassword)
-router.post("/user", handleUpdateUser)
-router.post("/user", handleGetUser)
+router.get("/user", isLoggedIn, handleGetUser)
  router.patch(
   "/user",
   isLoggedIn,
-  requiresPermission(["landlord"]),
+  requiresPermission("landlord"),
   handleUpdateUser
  )
 module.exports = router;
