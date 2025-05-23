@@ -25,3 +25,4 @@ router.get("/user", isLoggedIn, handleGetUser)
   handleUpdateUser
  )
 module.exports = router;
+c
