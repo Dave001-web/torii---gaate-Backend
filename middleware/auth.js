@@ -29,7 +29,7 @@ const isLoggedIn = async (req, res, next) => {
 // have the required permission
 // check if the user has the required permission
 
-const requiresPermission = (...roles) => {
+const requirePermissions = (...roles) => {
   return (req, res, next) => {
     if (!roles.includes(req.user.role)) {
       return res
@@ -42,5 +42,5 @@ const requiresPermission = (...roles) => {
 
 module.exports = {
   isLoggedIn,
-  requiresPermission,
+  requirePermissions,
 };
